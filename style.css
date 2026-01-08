@@ -1,0 +1,224 @@
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background: #000000;
+  /* Solid Black */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: none;
+  /* Hide default cursor */
+}
+
+/* Custom Cursor */
+.cursor-emoji {
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 24px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  /* Center on mouse */
+  will-change: transform;
+}
+
+/* Light Sweep Effect */
+.light-sweep {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  /* Wide enough to sweep */
+  height: 100%;
+  background: linear-gradient(115deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.15) 45%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0.15) 55%,
+      transparent 60%);
+  pointer-events: none;
+  z-index: 5;
+  /* Behind text (z-10), on top of BG */
+  transform: translateX(-100%);
+  mix-blend-mode: overlay;
+  /* Soft blend */
+  will-change: transform;
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  display: block;
+  /* Default block to prevent flex centering issues on body level */
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  /* Ensure black fallback */
+}
+
+/* Main Page Header */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 40px;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.87);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #fff;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Main Page Sections */
+.section {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 20px 20px;
+}
+
+.section h1 {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 700;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: block;
+  padding: 0;
+}
+
+/* Loading screen specific styles */
+#app:has(.word-wrapper) {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Wrapper for letters to keep them in a row */
+/* Wrapper for letters to keep them in a row */
+.word-wrapper {
+  display: flex;
+  justify-content: center;
+  /* Center */
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  /* Above ghosts */
+  text-align: center;
+  width: 100%;
+  /* Ensure full width for centering context */
+}
+
+.letter {
+  position: relative;
+  font-size: 32px;
+  /* Responsive base, slightly larger for main presence */
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  user-select: none;
+  display: inline-block;
+  margin: 0 4px;
+  /* More spacing */
+  will-change: transform, opacity, filter;
+  cursor: default;
+}
+
+/* Loading Gauge */
+.loading-bar-wrapper {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin-top: 20px;
+  /* Reduced from 40px */
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.loading-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: #fff;
+  will-change: width;
+}
+
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .letter {
+    font-size: 15vw;
+    /* Huge on mobile */
+    margin: 0 1vw;
+  }
+}
+
+.particle {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999;
+  will-change: transform, opacity;
+}
