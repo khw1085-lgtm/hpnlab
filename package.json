@@ -1,5 +1,5 @@
 {
-  "name": "main",
+  "name": "hpnlab",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^7.2.4"
+    "vite": "^5.0.0"
   },
   "dependencies": {
-    "gsap": "^3.14.2"
+    "gsap": "^3.12.0"
   }
 }
