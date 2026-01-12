@@ -5,10 +5,178 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HPN - Main</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #000;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #content {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    #content h1 {
+      color: #fff;
+      font-size: 48px;
+      font-weight: 700;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
+  <canvas id="canvas"></canvas>
+  <div id="content">
     <h1>메인</h1>
   </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    // Mouse position
+    let mouseX = -1000;
+    let mouseY = -1000;
+
+    // Dot grid settings
+    const dotSpacing = 25; // Space between dots
+    const dotRadius = 1.5; // Base dot size
+    const mouseRadius = 150; // Mouse influence radius
+    const pullStrength = 0.3; // How much dots are pulled
+
+    // Create dot grid
+    const dots = [];
+    for (let x = 0; x < width; x += dotSpacing) {
+      for (let y = 0; y < height; y += dotSpacing) {
+        dots.push({
+          x: x,
+          y: y,
+          originalX: x,
+          originalY: y,
+          vx: 0,
+          vy: 0
+        });
+      }
+    }
+
+    // Mouse move handler
+    canvas.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      mouseX = -1000;
+      mouseY = -1000;
+    });
+
+    // Animation loop
+    function animate() {
+      // Clear canvas
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, width, height);
+
+      // Update and draw dots
+      dots.forEach(dot => {
+        // Calculate distance from mouse
+        const dx = mouseX - dot.x;
+        const dy = mouseY - dot.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Apply magnetic pull effect
+        if (distance < mouseRadius) {
+          const force = (1 - distance / mouseRadius) * pullStrength;
+          dot.vx += dx * force * 0.1;
+          dot.vy += dy * force * 0.1;
+        }
+
+        // Apply velocity with damping
+        dot.x += dot.vx;
+        dot.y += dot.vy;
+        dot.vx *= 0.85; // Damping
+        dot.vy *= 0.85;
+
+        // Pull back to original position
+        const returnForce = 0.05;
+        dot.x += (dot.originalX - dot.x) * returnForce;
+        dot.y += (dot.originalY - dot.y) * returnForce;
+
+        // Calculate size based on distance from mouse
+        let size = dotRadius;
+        if (distance < mouseRadius) {
+          size = dotRadius + (1 - distance / mouseRadius) * 3;
+        }
+
+        // Calculate opacity based on distance from mouse
+        let opacity = 0.3;
+        if (distance < mouseRadius) {
+          opacity = 0.3 + (1 - distance / mouseRadius) * 0.7;
+        }
+
+        // Draw dot
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+
+      // Recreate dots
+      dots.length = 0;
+      for (let x = 0; x < width; x += dotSpacing) {
+        for (let y = 0; y < height; y += dotSpacing) {
+          dots.push({
+            x: x,
+            y: y,
+            originalX: x,
+            originalY: y,
+            vx: 0,
+            vy: 0
+          });
+        }
+      }
+    });
+
+    // Start animation
+    animate();
+  </script>
 </body>
 </html>

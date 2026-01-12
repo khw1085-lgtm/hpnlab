@@ -7,10 +7,41 @@
   <title>HPN - Loading</title>
 </head>
 <body>
-  <div id="app"></div>
-  <div id="main-content" class="main-content">
-    <h1>메인</h1>
+  <div id="app">
+    <canvas id="loading-canvas"></canvas>
   </div>
+
+  <!-- Page Transition Overlay -->
+  <div id="page-transition" class="page-transition">
+    <div class="page-transition-content" id="transition-text"></div>
+  </div>
+  
+  <!-- Fixed Header (hidden initially) -->
+  <header id="fixed-header" class="fixed-header">
+    <div class="header-logo" id="header-logo">HPN</div>
+    <nav class="header-nav">
+      <a href="home.html" class="header-nav-item">HOME</a>
+      <a href="work.html" class="header-nav-item">WORK</a>
+      <a href="about.html" class="header-nav-item">ABOUT</a>
+      <a href="contact.html" class="header-nav-item">CONTACT</a>
+    </nav>
+  </header>
+
+  <!-- Main Landing Page -->
+  <div id="main-content" class="main-content">
+    <!-- Icon Grid Background -->
+    <div id="icon-grid" class="icon-grid"></div>
+    <canvas id="canvas"></canvas>
+    <div id="content">
+      <nav class="main-nav">
+        <a href="home.html" class="nav-item">HOME</a>
+        <a href="work.html" class="nav-item">WORK</a>
+        <a href="about.html" class="nav-item">ABOUT</a>
+        <a href="contact.html" class="nav-item">CONTACT</a>
+      </nav>
+    </div>
+  </div>
+
   <script type="module" src="/main.js"></script>
 </body>
 </html>
