@@ -281,16 +281,16 @@ function scrollToMain(letters, loadingDotsData) {
         return;
     }
     
-    // Zigzag wave effect on loading dots (downward when letters scatter)
+    // Quick fade out for loading dots (simultaneous with page transition)
     if (loadingDotsData && loadingDotsData.dots) {
         const { ctx, dots, canvas } = loadingDotsData;
         const width = canvas.width;
         const height = canvas.height;
         
-        // Phase 1: Slow downward wave (2.5 seconds)
+        // Single quick fade out animation (0.8 seconds)
         gsap.to({}, {
-            duration: 2.5,
-            ease: "power1.in",
+            duration: 0.8,
+            ease: "power2.out",
             onUpdate: function() {
                 const progress = this.progress();
                 
@@ -299,96 +299,55 @@ function scrollToMain(letters, loadingDotsData) {
                 ctx.fillRect(0, 0, width, height);
                 
                 dots.forEach(dot => {
-                    // Diagonal wave from top-left to bottom-right
-                    const diagonalProgress = (dot.originalX + dot.originalY * 0.7) / (width + height * 0.7);
-                    const waveDelay = diagonalProgress * 0.7;
-                    const adjustedProgress = Math.max(0, Math.min(1, (progress - waveDelay) / 0.3));
+                    // Quick fade out with slight downward movement
+                    const opacity = 0.4 * (1 - progress);
+                    const moveY = progress * 50; // Subtle downward drift
                     
-                    // Gentle zigzag motion
-                    const zigzagFrequency = 4;
-                    const zigzagAmplitude = 60;
-                    const zigzagX = Math.sin(adjustedProgress * Math.PI * zigzagFrequency) * zigzagAmplitude * (1 - adjustedProgress * 0.5);
-                    
-                    // Smooth vertical wave motion
-                    const waveY = Math.sin(adjustedProgress * Math.PI * 3) * 35 * (1 - adjustedProgress * 0.7);
-                    
-                    // Slower downward movement
-                    const fallY = Math.pow(adjustedProgress, 2) * height * 1.3;
-                    
-                    dot.waveOffset = waveY + fallY;
-                    dot.zigzagOffset = zigzagX;
-                    
-                    const opacity = 0.4 * (1 - adjustedProgress * 0.8);
-                    
-                    if (opacity > 0.02) {
-                        const dotSize = 1.2 + (1 - adjustedProgress) * 0.5;
+                    if (opacity > 0.01) {
+                        // Color based on position - vibrant
+                        const hue = (dot.originalX / width) * 360;
+                        const sat = 85;
+                        const light = 60;
+                        
+                        // Convert HSL to RGB
+                        const c = (1 - Math.abs(2 * light / 100 - 1)) * sat / 100;
+                        const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
+                        const m = light / 100 - c / 2;
+                        
+                        let r, g, b;
+                        if (hue < 60) {
+                            r = c; g = x; b = 0;
+                        } else if (hue < 120) {
+                            r = x; g = c; b = 0;
+                        } else if (hue < 180) {
+                            r = 0; g = c; b = x;
+                        } else if (hue < 240) {
+                            r = 0; g = x; b = c;
+                        } else if (hue < 300) {
+                            r = x; g = 0; b = c;
+                        } else {
+                            r = c; g = 0; b = x;
+                        }
+                        
+                        const color = {
+                            r: Math.round((r + m) * 255),
+                            g: Math.round((g + m) * 255),
+                            b: Math.round((b + m) * 255)
+                        };
+                        
                         ctx.beginPath();
-                        ctx.arc(dot.x + dot.zigzagOffset, dot.y + dot.waveOffset, dotSize, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                        ctx.arc(dot.x, dot.y + moveY, 1.2, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`;
                         ctx.fill();
                     }
                 });
             },
             onComplete: () => {
-                // Phase 2: Gentle fade out (1.5 seconds)
-                gsap.to({}, {
-                    duration: 1.5,
-                    ease: "power2.out",
-                    onUpdate: function() {
-                        const progress = this.progress();
-                        
-                        ctx.clearRect(0, 0, width, height);
-                        ctx.fillStyle = '#000';
-                        ctx.fillRect(0, 0, width, height);
-                        
-                        dots.forEach(dot => {
-                            // Gentle fade out - no movement
-                            const opacity = 0.5 * (1 - progress);
-                            
-                            if (opacity > 0.01) {
-                                // Color based on position - vibrant
-                                const hue = (dot.originalX / width) * 360;
-                                const sat = 85;
-                                const light = 60;
-                                
-                                // Convert HSL to RGB
-                                const c = (1 - Math.abs(2 * light / 100 - 1)) * sat / 100;
-                                const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
-                                const m = light / 100 - c / 2;
-                                
-                                let r, g, b;
-                                if (hue < 60) {
-                                    r = c; g = x; b = 0;
-                                } else if (hue < 120) {
-                                    r = x; g = c; b = 0;
-                                } else if (hue < 180) {
-                                    r = 0; g = c; b = x;
-                                } else if (hue < 240) {
-                                    r = 0; g = x; b = c;
-                                } else if (hue < 300) {
-                                    r = x; g = 0; b = c;
-                                } else {
-                                    r = c; g = 0; b = x;
-                                }
-                                
-                                const color = {
-                                    r: Math.round((r + m) * 255),
-                                    g: Math.round((g + m) * 255),
-                                    b: Math.round((b + m) * 255)
-                                };
-                                
-                                ctx.beginPath();
-                                ctx.arc(dot.x, dot.y, 1.2, 0, Math.PI * 2);
-                                ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity * 0.6})`;
-                                ctx.fill();
-                            }
-                        });
-                    },
-                    onComplete: () => {
-                        // Clear canvas after animation
-                        ctx.clearRect(0, 0, width, height);
-                    }
-                });
+                // Clear canvas after animation
+                ctx.clearRect(0, 0, width, height);
+                loadingDotsData.stopAnimation();
+                canvas.style.display = 'none';
+                container.style.display = 'none';
             }
         });
     }
@@ -415,8 +374,8 @@ function scrollToMain(letters, loadingDotsData) {
             rotation: scatterRotation,
             opacity: 0,
             scale: 0.3,
-            duration: 1.5,
-            ease: "power2.inOut"
+            duration: 0.8,
+            ease: "power2.in"
         });
     });
     
@@ -424,17 +383,17 @@ function scrollToMain(letters, loadingDotsData) {
     gsap.to(container, {
         y: -window.innerHeight,
         opacity: 0,
-        duration: 1.5,
-        ease: "power2.inOut"
+        duration: 0.8,
+        ease: "power2.in"
     });
     
-    // Animate main content scrolling up from below - gradually appearing
+    // Animate main content scrolling up from below - simultaneously with loading page exit
     gsap.to(mainContent, {
         y: 0,
         opacity: 1,
-        duration: 1.5,
-        ease: "power2.inOut",
-        delay: 0.3, // Slight delay for smoother transition
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0, // No delay - start immediately for crossfade effect
         onComplete: () => {
             // Initialize icon grid and dot animation after main content is visible
             initIconGrid();
@@ -639,14 +598,28 @@ function initDotAnimation() {
         for (let y = 0; y < height; y += dotSpacing) {
             dots.push({
                 x: x,
-                y: y,
+                y: y + height, // Start below viewport
                 originalX: x,
                 originalY: y,
                 vx: 0,
-                vy: 0
+                vy: 0,
+                slideProgress: 0 // For slide-up animation
             });
         }
     }
+    
+    // Animate dots sliding up from bottom
+    gsap.to(dots, {
+        slideProgress: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        onUpdate: function() {
+            const progress = dots[0].slideProgress;
+            dots.forEach(dot => {
+                dot.y = dot.originalY + height * (1 - progress);
+            });
+        }
+    });
 
     // Mouse move handler
     canvas.addEventListener('mousemove', (e) => {
