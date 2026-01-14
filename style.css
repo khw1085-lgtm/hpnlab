@@ -43,12 +43,13 @@ body {
 
 .page-transition-content {
   color: #fff;
-  font-size: 48px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 4px;
+  letter-spacing: 1px;
   opacity: 0;
   transform: translateY(30px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+  font-variant-numeric: tabular-nums;
 }
 
 .page-transition.active .page-transition-content {
@@ -79,11 +80,17 @@ body {
 
 .word-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
   position: relative;
   z-index: 10;
+}
+
+.word-wrapper > div:first-child {
+  display: flex;
+  gap: 12px;
 }
 
 .letter {
@@ -96,6 +103,15 @@ body {
   position: relative;
   width: 50px;
   height: 50px;
+}
+
+.loading-percentage {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2px;
+  opacity: 0.8;
+  user-select: none;
 }
 
 /* Falling Dot Container and Dots */
@@ -175,37 +191,99 @@ body {
   width: 100%;
   height: 100vh;
   display: flex;
-  align-items: center;
-  padding-left: 80px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 80px;
   pointer-events: none;
+}
+
+.hero-text {
+  text-align: left;
+  margin-top: auto;
+  margin-bottom: auto;
+  pointer-events: none;
+}
+
+.hero-title {
+  color: #fff;
+  font-size: 120px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.hero-description {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.8;
+  margin: 30px 0 0 0;
+  opacity: 0;
+  transform: translateY(30px);
+  max-width: 600px;
 }
 
 .main-nav {
   display: flex;
-  flex-direction: column;
-  gap: 34px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0;
   pointer-events: auto;
+  margin-top: auto;
+  margin-bottom: 60px;
+  width: 100%;
+  max-width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 30px;
+  perspective: 1000px;
 }
 
 .nav-item {
   color: #fff;
-  font-size: 82px;
+  font-size: 18px;
   font-weight: 400;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
   opacity: 0;
-  letter-spacing: 3px;
+  letter-spacing: 1px;
   pointer-events: auto;
   cursor: pointer;
-  display: block;
-  transform: translateY(100px);
+  display: inline-block;
+  transform: translateY(50px);
+  text-align: left;
+  padding: 15px 25px;
+  margin: -15px -25px;
+  border: none;
+  border-radius: 0;
+  position: relative;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform;
+  animation: none;
+}
+
+@keyframes rotateX360 {
+  0% {
+    transform: translateY(0) rotateX(0deg);
+  }
+  100% {
+    transform: translateY(0) rotateX(360deg);
+  }
+}
+
+.nav-item:not(:hover) {
+  animation: none;
 }
 
 .nav-item:hover {
   opacity: 1 !important;
-  transform: translateX(10px) translateY(0) !important;
   color: #fff;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  transform: translateY(0);
+  animation: rotateX360 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 
@@ -246,6 +324,7 @@ body {
   display: flex;
   gap: 40px;
   align-items: center;
+  perspective: 1000px;
 }
 
 .header-nav-item {
@@ -255,14 +334,26 @@ body {
   text-decoration: none;
   letter-spacing: 1px;
   opacity: 0.8;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
   pointer-events: auto;
   cursor: pointer;
+  display: inline-block;
+  padding: 10px 15px;
+  margin: -10px -15px;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform;
+  animation: none;
+}
+
+.header-nav-item:not(:hover) {
+  animation: none;
 }
 
 .header-nav-item:hover {
   opacity: 1;
   color: #fff;
+  animation: rotateX360 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .header-nav-item.active {
@@ -271,8 +362,65 @@ body {
   padding-bottom: 2px;
 }
 
+/* White page header override */
+body.white-page .fixed-header {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+/* About and Contact pages - black border */
+body.about-page .fixed-header,
+body.contact-page .fixed-header {
+  border-bottom: 1px solid #000 !important;
+}
+
+body.white-page .header-logo,
+body.white-page .fixed-header .header-logo,
+body.white-page .fixed-header.visible .header-logo {
+  color: #000 !important;
+}
+
+body.white-page .header-nav-item,
+body.white-page .fixed-header .header-nav-item,
+body.white-page .fixed-header.visible .header-nav-item {
+  color: #000 !important;
+}
+
+body.white-page .header-nav-item:hover,
+body.white-page .fixed-header .header-nav-item:hover {
+  color: #000 !important;
+  opacity: 1 !important;
+}
+
+body.white-page .header-nav-item.active,
+body.white-page .fixed-header .header-nav-item.active {
+  color: #000 !important;
+  border-bottom-color: #000 !important;
+}
+
 
 /* Mobile Responsive */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 90px;
+  }
+  
+  .hero-description {
+    font-size: 19px;
+    line-height: 1.7;
+    max-width: 500px;
+  }
+  
+  .main-nav {
+    flex-wrap: wrap;
+    gap: 20px 40px;
+  }
+  
+  .nav-item {
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 768px) {
   .letter {
     font-size: 24px;
@@ -281,18 +429,27 @@ body {
   .word-wrapper {
     gap: 8px;
   }
+  
+  .hero-title {
+    font-size: 64px;
+  }
+  
+  .hero-description {
+    font-size: 17px;
+    max-width: 450px;
+  }
 
   #content {
-    padding-left: 40px;
-    padding-right: 40px;
+    padding: 40px;
   }
 
   .main-nav {
-    gap: 16px;
+    gap: 15px 30px;
+    flex-wrap: wrap;
   }
 
   .nav-item {
-    font-size: 32px;
+    font-size: 14px;
     letter-spacing: 1px;
   }
 
@@ -319,18 +476,27 @@ body {
   .letter {
     font-size: 20px;
   }
+  
+  .hero-title {
+    font-size: 48px;
+  }
+  
+  .hero-description {
+    font-size: 14px;
+    max-width: 100%;
+  }
 
   #content {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 24px;
   }
 
   .main-nav {
-    gap: 12px;
+    gap: 12px 20px;
+    flex-wrap: wrap;
   }
 
   .nav-item {
-    font-size: 24px;
+    font-size: 13px;
   }
 
   .fixed-header {
@@ -355,18 +521,25 @@ body {
   .letter {
     font-size: 16px;
   }
+  
+  .hero-title {
+    font-size: 40px;
+  }
+  
+  .hero-description {
+    font-size: 13px;
+  }
 
   #content {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 20px;
   }
 
   .main-nav {
-    gap: 10px;
+    gap: 10px 15px;
   }
 
   .nav-item {
-    font-size: 16px;
+    font-size: 12px;
   }
 
   .fixed-header {

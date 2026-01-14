@@ -138,9 +138,12 @@ function init() {
         });
     }
 
-    // Create HPN text wrapper (but don't clear container yet to preserve canvas)
+    // Create WYND23 text wrapper (but don't clear container yet to preserve canvas)
     const wordWrapper = document.createElement('div');
     wordWrapper.className = 'word-wrapper';
+    
+    // Create container for letters
+    const lettersContainer = document.createElement('div');
     
     // Only remove existing word-wrapper if it exists
     const existingWrapper = container.querySelector('.word-wrapper');
@@ -148,12 +151,13 @@ function init() {
         existingWrapper.remove();
     }
     
+    wordWrapper.appendChild(lettersContainer);
     container.appendChild(wordWrapper);
     
     // Initialize loading dots after DOM is set up
     const loadingDotsData = initLoadingDots();
 
-    const text = 'HPN';
+    const text = 'WYND23';
     const letters = [];
     
     // Create letters with dot canvas
@@ -195,7 +199,7 @@ function init() {
         span.letterDots = letterDots;
         span.appendChild(letterCanvas);
         
-        wordWrapper.appendChild(span);
+        lettersContainer.appendChild(span);
         letters.push(span);
         
         // Animate dots for this letter
@@ -212,6 +216,12 @@ function init() {
         animateLetterDots();
     });
     
+    // Create loading percentage element
+    const percentageElement = document.createElement('div');
+    percentageElement.className = 'loading-percentage';
+    percentageElement.textContent = '0%';
+    wordWrapper.appendChild(percentageElement);
+    
     // Total animation duration
     const totalDuration = 2.2;
 
@@ -219,6 +229,17 @@ function init() {
     const finalY = 0; // Centered position
     
     let completedLetters = 0;
+    
+    // Animate loading percentage from 0 to 100
+    gsap.to({ value: 0 }, {
+        value: 100,
+        duration: totalDuration,
+        ease: "power2.out",
+        onUpdate: function() {
+            const currentValue = Math.round(this.targets()[0].value);
+            percentageElement.textContent = currentValue + '%';
+        }
+    });
     
     // Animate letters falling with impactful rotation and spring effect
     letters.forEach((letter, index) => {
@@ -378,6 +399,17 @@ function scrollToMain(letters, loadingDotsData) {
             ease: "power2.in"
         });
     });
+    
+    // Fade out percentage text
+    const percentageElement = document.querySelector('.loading-percentage');
+    if (percentageElement) {
+        gsap.to(percentageElement, {
+            opacity: 0,
+            y: -50,
+            duration: 0.8,
+            ease: "power2.inOut"
+        });
+    }
     
     // Animate container (loading page) moving up
     gsap.to(container, {
@@ -588,7 +620,7 @@ function initDotAnimation() {
     // Dot grid settings
     const dotSpacing = 15; // Space between dots (reduced for tighter grid)
     const dotRadius = 1.2; // Base dot size (slightly smaller)
-    const mouseRadius = 150; // Mouse influence radius
+    const mouseRadius = 250; // Mouse influence radius (increased from 150)
     const pullStrength = 0.25; // Magnetic pull strength
     const velocityInfluence = 0.8; // How much mouse velocity affects dots
 
@@ -618,8 +650,33 @@ function initDotAnimation() {
             dots.forEach(dot => {
                 dot.y = dot.originalY + height * (1 - progress);
             });
+        },
+        onComplete: function() {
+            // Start magnetic sweep from right to left after dots are in place
+            startMagneticSweep();
         }
     });
+    
+    // Magnetic sweep effect (right to left)
+    let sweepX = width + mouseRadius;
+    let sweepActive = false;
+    
+    function startMagneticSweep() {
+        sweepActive = true;
+        sweepX = width + mouseRadius;
+        
+        gsap.to({ x: sweepX }, {
+            x: -mouseRadius,
+            duration: 1.5,
+            ease: "power1.inOut",
+            onUpdate: function() {
+                sweepX = this.targets()[0].x;
+            },
+            onComplete: function() {
+                sweepActive = false;
+            }
+        });
+    }
 
     // Mouse move handler
     canvas.addEventListener('mousemove', (e) => {
@@ -650,25 +707,50 @@ function initDotAnimation() {
             const dx = mouseX - dot.x;
             const dy = mouseY - dot.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // Calculate distance from sweep line (if active)
+            let sweepDistance = Infinity;
+            if (sweepActive) {
+                sweepDistance = Math.abs(sweepX - dot.x);
+            }
+            
+            // Use the closer of mouse or sweep
+            const effectiveDistance = Math.min(distance, sweepDistance);
+            const useSweep = sweepActive && sweepDistance < distance;
 
-            if (distance < mouseRadius) {
+            if (effectiveDistance < mouseRadius) {
                 // Magnetic field effect
-                const distanceRatio = 1 - distance / mouseRadius;
+                const distanceRatio = 1 - effectiveDistance / mouseRadius;
                 const magneticForce = distanceRatio * distanceRatio * pullStrength; // Quadratic falloff
                 
-                // Pull towards mouse
-                const angle = Math.atan2(dy, dx);
-                dot.vx += Math.cos(angle) * magneticForce;
-                dot.vy += Math.sin(angle) * magneticForce;
-                
-                // Add mouse velocity influence (flow effect)
-                dot.vx += mouseVelX * velocityInfluence * distanceRatio;
-                dot.vy += mouseVelY * velocityInfluence * distanceRatio;
-                
-                // Slight orbital motion for more fluid feel
-                const orbitalForce = distanceRatio * 0.02;
-                dot.vx += -Math.sin(angle) * orbitalForce;
-                dot.vy += Math.cos(angle) * orbitalForce;
+                if (useSweep) {
+                    // Sweep effect: pull in Y direction with wave pattern
+                    const sweepDx = sweepX - dot.x;
+                    const sweepDy = 0; // Vertical center
+                    const sweepAngle = Math.atan2(sweepDy, sweepDx);
+                    
+                    // Horizontal pull towards sweep line
+                    dot.vx += Math.cos(sweepAngle) * magneticForce * 0.5;
+                    
+                    // Vertical wave motion
+                    const waveOffset = Math.sin(dot.x * 0.02 + Date.now() * 0.003) * 30;
+                    const waveDy = waveOffset - (dot.y - dot.originalY);
+                    dot.vy += waveDy * magneticForce * 0.3;
+                } else {
+                    // Normal mouse effect
+                    const angle = Math.atan2(dy, dx);
+                    dot.vx += Math.cos(angle) * magneticForce;
+                    dot.vy += Math.sin(angle) * magneticForce;
+                    
+                    // Add mouse velocity influence (flow effect)
+                    dot.vx += mouseVelX * velocityInfluence * distanceRatio;
+                    dot.vy += mouseVelY * velocityInfluence * distanceRatio;
+                    
+                    // Slight orbital motion for more fluid feel
+                    const orbitalForce = distanceRatio * 0.02;
+                    dot.vx += -Math.sin(angle) * orbitalForce;
+                    dot.vy += Math.cos(angle) * orbitalForce;
+                }
             }
 
             // Apply velocity with damping
@@ -684,18 +766,18 @@ function initDotAnimation() {
             dot.vx += returnDx * returnForce;
             dot.vy += returnDy * returnForce;
 
-            // Calculate size based on distance from mouse
+            // Calculate size based on distance from mouse or sweep
             let size = dotRadius;
-            if (distance < mouseRadius) {
-                size = dotRadius + (1 - distance / mouseRadius) * 2; // Reduced size increase
+            if (effectiveDistance < mouseRadius) {
+                size = dotRadius + (1 - effectiveDistance / mouseRadius) * 2; // Reduced size increase
             }
 
-            // Calculate opacity based on distance from mouse
+            // Calculate opacity based on distance from mouse or sweep
             let opacity = 0.3;
             let color = { r: 255, g: 255, b: 255 }; // Default white
             
-            if (distance < mouseRadius) {
-                opacity = 0.3 + (1 - distance / mouseRadius) * 0.7;
+            if (effectiveDistance < mouseRadius) {
+                opacity = 0.3 + (1 - effectiveDistance / mouseRadius) * 0.7;
                 
                 // Color based on position
                 const hue = (dot.originalX / width) * 360; // Horizontal gradient
@@ -770,11 +852,22 @@ function navigateWithTransition(url, pageName) {
     const transitionText = document.getElementById('transition-text');
     const mainContent = document.querySelector('#main-content');
     
-    // Set the page name
-    transitionText.textContent = pageName;
+    // Set initial percentage
+    transitionText.textContent = '0%';
     
     // Start transition
     transition.classList.add('active');
+    
+    // Animate percentage from 0 to 100
+    gsap.to({ value: 0 }, {
+        value: 100,
+        duration: 0.8,
+        ease: "power2.inOut",
+        onUpdate: function() {
+            const currentValue = Math.round(this.targets()[0].value);
+            transitionText.textContent = currentValue + '%';
+        }
+    });
     
     // Animate main content out
     gsap.to(mainContent, {
@@ -843,21 +936,44 @@ function createDotText() {
 
 // Animate menu items from bottom to top
 function animateMenuItems() {
+    const heroTitles = document.querySelectorAll('.hero-title');
+    const heroDescription = document.querySelector('.hero-description');
     const mainNavItems = document.querySelectorAll('.main-nav .nav-item');
     
-    // Set initial state - hidden below
+    // Animate hero titles first
+    gsap.to(heroTitles, {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: "power3.out",
+        stagger: 0.15
+    });
+    
+    // Animate hero description after titles
+    if (heroDescription) {
+        gsap.to(heroDescription, {
+            y: 0,
+            opacity: 0.8,
+            duration: 1.0,
+            ease: "power3.out",
+            delay: 0.4
+        });
+    }
+    
+    // Set initial state for nav items - hidden below
     gsap.set(mainNavItems, {
-        y: 100,
+        y: 50,
         opacity: 0
     });
     
-    // Animate each item with stagger
+    // Animate nav items with stagger, delayed after hero titles
     gsap.to(mainNavItems, {
         y: 0,
         opacity: 0.8,
         duration: 0.8,
         ease: "power3.out",
-        stagger: 0.15, // Delay between each item
+        stagger: 0.1,
+        delay: 0.5,
         onComplete: function() {
             // Ensure final opacity is set for all items
             mainNavItems.forEach(item => {
@@ -870,6 +986,7 @@ function animateMenuItems() {
 // Navigation functionality
 function initNavigation() {
     const mainNavItems = document.querySelectorAll('.main-nav .nav-item');
+    const headerNavItems = document.querySelectorAll('.header-nav .header-nav-item');
     const headerLogo = document.querySelector('#header-logo');
     
     // Handle main navigation clicks
@@ -880,7 +997,9 @@ function initNavigation() {
             const pageName = item.textContent;
             navigateWithTransition(url, pageName);
         });
+        
     });
+    
     
     // Handle header logo click - reload page to start from beginning
     if (headerLogo) {
