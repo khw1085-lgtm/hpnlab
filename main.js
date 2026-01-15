@@ -1,15 +1,6 @@
 import './style.css'
 import gsap from 'gsap'
 
-const container = document.querySelector('#app');
-let hasNavigated = false;
-
-function goToMain() {
-    if (hasNavigated) return;
-    hasNavigated = true;
-    window.location.replace('/main.html');
-}
-
 // Utility function to get pixel data from text
 function getTextPixelData(text, fontSize, fontWeight, font, canvasWidth, canvasHeight) {
     const canvas = document.createElement('canvas');
@@ -43,399 +34,28 @@ function getTextPixelData(text, fontSize, fontWeight, font, canvasWidth, canvasH
     return pixels;
 }
 
-// Initialize loading page dots
-function initLoadingDots() {
-    const canvas = document.getElementById('loading-canvas');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    const dotSpacing = 15;
-    const dotRadius = 1.2;
-    const dots = [];
-    
-    // Create dot grid without text mask
-    for (let x = 0; x < width; x += dotSpacing) {
-        for (let y = 0; y < height; y += dotSpacing) {
-            dots.push({
-                x: x,
-                y: y,
-                originalX: x,
-                originalY: y,
-                waveOffset: 0
-            });
-        }
+// Initialize - removed loading page
+function initMainPage() {
+    // Show header immediately
+    const header = document.getElementById('fixed-header');
+    if (header) {
+        header.classList.add('visible');
     }
     
-    let animationId;
-    let waveProgress = 0;
-    
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, width, height);
-        
-        dots.forEach(dot => {
-            // Color based on position (horizontal gradient) - more vibrant
-            const hue = (dot.originalX / width) * 360;
-            const sat = 85;
-            const light = 60;
-            
-            // Convert HSL to RGB
-            const c = (1 - Math.abs(2 * light / 100 - 1)) * sat / 100;
-            const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
-            const m = light / 100 - c / 2;
-            
-            let r, g, b;
-            if (hue < 60) {
-                r = c; g = x; b = 0;
-            } else if (hue < 120) {
-                r = x; g = c; b = 0;
-            } else if (hue < 180) {
-                r = 0; g = c; b = x;
-            } else if (hue < 240) {
-                r = 0; g = x; b = c;
-            } else if (hue < 300) {
-                r = x; g = 0; b = c;
-            } else {
-                r = c; g = 0; b = x;
-            }
-            
-            const color = {
-                r: Math.round((r + m) * 255),
-                g: Math.round((g + m) * 255),
-                b: Math.round((b + m) * 255)
-            };
-            
-            ctx.beginPath();
-            ctx.arc(dot.x, dot.y + dot.waveOffset, dotRadius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, 0.3)`;
-            ctx.fill();
-        });
-        
-        animationId = requestAnimationFrame(animate);
-    }
-    
-    animate();
-    
-    return { canvas, ctx, dots, stopAnimation: () => cancelAnimationFrame(animationId) };
-}
-
-function init() {
-    if (!container) return;
-    
-    // Hide main content initially
+    // Show main content immediately
     const mainContent = document.querySelector('#main-content');
     if (mainContent) {
         gsap.set(mainContent, {
-            y: window.innerHeight,
-            opacity: 0,
-            visibility: 'hidden'
-        });
-    }
-
-    // Create WYND23 text wrapper (but don't clear container yet to preserve canvas)
-    const wordWrapper = document.createElement('div');
-    wordWrapper.className = 'word-wrapper';
-    
-    // Create container for letters
-    const lettersContainer = document.createElement('div');
-    
-    // Only remove existing word-wrapper if it exists
-    const existingWrapper = container.querySelector('.word-wrapper');
-    if (existingWrapper) {
-        existingWrapper.remove();
-    }
-    
-    wordWrapper.appendChild(lettersContainer);
-    container.appendChild(wordWrapper);
-    
-    // Initialize loading dots after DOM is set up
-    const loadingDotsData = initLoadingDots();
-
-    const text = 'WYND23';
-    const letters = [];
-    
-    // Create letters with dot canvas
-    text.split('').forEach((char, index) => {
-        const span = document.createElement('span');
-        span.className = 'letter';
-        
-        // Create canvas for each letter
-        const letterCanvas = document.createElement('canvas');
-        letterCanvas.width = 50;
-        letterCanvas.height = 50;
-        letterCanvas.style.position = 'absolute';
-        letterCanvas.style.top = '0';
-        letterCanvas.style.left = '0';
-        
-        const letterCtx = letterCanvas.getContext('2d');
-        
-        // Draw letter as text mask
-        letterCtx.fillStyle = 'white';
-        letterCtx.font = 'bold 32px system-ui';
-        letterCtx.textAlign = 'center';
-        letterCtx.textBaseline = 'middle';
-        letterCtx.fillText(char, 25, 25);
-        
-        // Create dots for this letter
-        const letterDots = [];
-        const dotSpacing = 3;
-        for (let x = 0; x < 50; x += dotSpacing) {
-            for (let y = 0; y < 50; y += dotSpacing) {
-                const pixelData = letterCtx.getImageData(x, y, 1, 1).data;
-                if (pixelData[3] > 128) {
-                    letterDots.push({ x, y });
-                }
-            }
-        }
-        
-        // Store letter data
-        span.letterCanvas = letterCanvas;
-        span.letterDots = letterDots;
-        span.appendChild(letterCanvas);
-        
-        lettersContainer.appendChild(span);
-        letters.push(span);
-        
-        // Animate dots for this letter
-        function animateLetterDots() {
-            letterCtx.clearRect(0, 0, 50, 50);
-            letterDots.forEach(dot => {
-                letterCtx.beginPath();
-                letterCtx.arc(dot.x, dot.y, 1.5, 0, Math.PI * 2);
-                letterCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                letterCtx.fill();
-            });
-            requestAnimationFrame(animateLetterDots);
-        }
-        animateLetterDots();
-    });
-    
-    // Create loading percentage element
-    const percentageElement = document.createElement('div');
-    percentageElement.className = 'loading-percentage';
-    percentageElement.textContent = '0%';
-    wordWrapper.appendChild(percentageElement);
-    
-    // Total animation duration
-    const totalDuration = 2.2;
-
-    // Calculate final Y position - centered
-    const finalY = 0; // Centered position
-    
-    let completedLetters = 0;
-    
-    // Animate loading percentage from 0 to 100
-    gsap.to({ value: 0 }, {
-        value: 100,
-        duration: totalDuration,
-        ease: "power2.out",
-        onUpdate: function() {
-            const currentValue = Math.round(this.targets()[0].value);
-            percentageElement.textContent = currentValue + '%';
-        }
-    });
-    
-    // Animate letters falling with impactful rotation and spring effect
-    letters.forEach((letter, index) => {
-        // More impactful rotation for each letter
-        const randomRotation = (Math.random() * 360) - 180; // -180 to 180 degrees
-        // Stagger delay for sequential effect
-        const delay = index * 0.25; // 0s, 0.25s, 0.5s
-        // Small X offset
-        const randomX = (Math.random() * 100) - 50; // -50 to 50px
-        // Small Y starting position variation - reduced height
-        const randomYOffset = Math.random() * 30;
-        
-        // Initial state - start from above with rotation (reduced height)
-        gsap.set(letter, {
-            y: -window.innerHeight * 0.5 - randomYOffset, // Reduced from full height
-            x: randomX,
-            rotation: randomRotation,
-            opacity: 0,
-            scale: 0.8
-        });
-        
-        // Falling animation with rotation - subtle spring effect
-        gsap.to(letter, {
-            y: finalY, // Final position - centered
-            x: 0,
-            rotation: 0, // Rotate back to 0 as it falls
             opacity: 1,
-            scale: 1,
-            duration: totalDuration - delay, // Each letter takes remaining time
-            delay: delay,
-            ease: "elastic.out(1, 0.6)", // Less bouncy spring effect
-            onComplete: () => {
-                completedLetters++;
-                // When all letters have completed, start scroll animation
-                if (completedLetters === letters.length) {
-                    scrollToMain(letters, loadingDotsData);
-                }
-            }
+            visibility: 'visible'
         });
-    });
-
-    // Click to skip
-    container.addEventListener('click', () => {
-        scrollToMain(letters, loadingDotsData);
-    });
-    container.addEventListener('wheel', () => {
-        scrollToMain(letters, loadingDotsData);
-    });
-}
-
-function scrollToMain(letters, loadingDotsData) {
-    if (hasNavigated) return;
-    hasNavigated = true;
-    
-    // Get main content element
-    const mainContent = document.querySelector('#main-content');
-    if (!mainContent) {
-        // Fallback: navigate to main page
-        window.location.replace('/main.html');
-        return;
-    }
-    
-    // Quick fade out for loading dots (simultaneous with page transition)
-    if (loadingDotsData && loadingDotsData.dots) {
-        const { ctx, dots, canvas } = loadingDotsData;
-        const width = canvas.width;
-        const height = canvas.height;
         
-        // Single quick fade out animation (0.8 seconds)
-        gsap.to({}, {
-            duration: 0.8,
-            ease: "power2.out",
-            onUpdate: function() {
-                const progress = this.progress();
-                
-                ctx.clearRect(0, 0, width, height);
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, width, height);
-                
-                dots.forEach(dot => {
-                    // Quick fade out with slight downward movement
-                    const opacity = 0.4 * (1 - progress);
-                    const moveY = progress * 50; // Subtle downward drift
-                    
-                    if (opacity > 0.01) {
-                        // Color based on position - vibrant
-                        const hue = (dot.originalX / width) * 360;
-                        const sat = 85;
-                        const light = 60;
-                        
-                        // Convert HSL to RGB
-                        const c = (1 - Math.abs(2 * light / 100 - 1)) * sat / 100;
-                        const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
-                        const m = light / 100 - c / 2;
-                        
-                        let r, g, b;
-                        if (hue < 60) {
-                            r = c; g = x; b = 0;
-                        } else if (hue < 120) {
-                            r = x; g = c; b = 0;
-                        } else if (hue < 180) {
-                            r = 0; g = c; b = x;
-                        } else if (hue < 240) {
-                            r = 0; g = x; b = c;
-                        } else if (hue < 300) {
-                            r = x; g = 0; b = c;
-                        } else {
-                            r = c; g = 0; b = x;
-                        }
-                        
-                        const color = {
-                            r: Math.round((r + m) * 255),
-                            g: Math.round((g + m) * 255),
-                            b: Math.round((b + m) * 255)
-                        };
-                        
-                        ctx.beginPath();
-                        ctx.arc(dot.x, dot.y + moveY, 1.2, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`;
-                        ctx.fill();
-                    }
-                });
-            },
-            onComplete: () => {
-                // Clear canvas after animation
-                ctx.clearRect(0, 0, width, height);
-                loadingDotsData.stopAnimation();
-                canvas.style.display = 'none';
-                container.style.display = 'none';
-            }
-        });
+        // Animate hero text
+        animateHeroText();
     }
-    
-    // Ensure main content is hidden and positioned below
-    gsap.set(mainContent, {
-        y: window.innerHeight,
-        opacity: 0,
-        visibility: 'visible' // Make it visible for animation
-    });
-    
-    // Animate each letter scattering in different directions while moving up
-    letters.forEach((letter, index) => {
-        // Random direction for each letter to scatter
-        const angle = (index * 120) + (Math.random() * 60 - 30); // Spread in different directions
-        const distance = 300 + Math.random() * 200; // Distance to scatter
-        const scatterX = Math.cos(angle * Math.PI / 180) * distance;
-        const scatterY = -window.innerHeight - 200 - (Math.sin(angle * Math.PI / 180) * distance);
-        const scatterRotation = (Math.random() * 720) - 360; // Random rotation
-
-        gsap.to(letter, {
-            x: scatterX,
-            y: scatterY,
-            rotation: scatterRotation,
-            opacity: 0,
-            scale: 0.3,
-            duration: 0.8,
-            ease: "power2.in"
-        });
-    });
-    
-    // Fade out percentage text
-    const percentageElement = document.querySelector('.loading-percentage');
-    if (percentageElement) {
-        gsap.to(percentageElement, {
-            opacity: 0,
-            y: -50,
-            duration: 0.8,
-            ease: "power2.inOut"
-        });
-    }
-    
-    // Animate container (loading page) moving up
-    gsap.to(container, {
-        y: -window.innerHeight,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power2.in"
-    });
-    
-    // Animate main content scrolling up from below - simultaneously with loading page exit
-    gsap.to(mainContent, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out",
-        delay: 0, // No delay - start immediately for crossfade effect
-        onComplete: () => {
-            // Initialize icon grid and dot animation after main content is visible
-            initIconGrid();
-            initDotAnimation();
-            
-            // Animate menu items from bottom to top with stagger
-            animateMenuItems();
-        }
-    });
 }
+
+// Removed loading page functions - main page shows immediately
 
 // Initialize icon grid
 function initIconGrid() {
@@ -607,7 +227,7 @@ function initDotAnimation() {
     const ctx = canvas.getContext('2d');
 
     let width = window.innerWidth;
-    let height = window.innerHeight;
+    let height = 600; // Fixed height for main content area
     canvas.width = width;
     canvas.height = height;
 
@@ -624,13 +244,14 @@ function initDotAnimation() {
     const pullStrength = 0.25; // Magnetic pull strength
     const velocityInfluence = 0.8; // How much mouse velocity affects dots
 
-    // Create dot grid
+    // Create dot grid (only for 600px height)
     const dots = [];
+    const maxHeight = 600; // Limit to 600px
     for (let x = 0; x < width; x += dotSpacing) {
-        for (let y = 0; y < height; y += dotSpacing) {
+        for (let y = 0; y < maxHeight; y += dotSpacing) {
             dots.push({
                 x: x,
-                y: y + height, // Start below viewport
+                y: y + maxHeight, // Start below viewport
                 originalX: x,
                 originalY: y,
                 vx: 0,
@@ -650,45 +271,7 @@ function initDotAnimation() {
             dots.forEach(dot => {
                 dot.y = dot.originalY + height * (1 - progress);
             });
-        },
-        onComplete: function() {
-            // Start magnetic sweep from right to left after dots are in place
-            startMagneticSweep();
         }
-    });
-    
-    // Magnetic sweep effect (right to left)
-    let sweepX = width + mouseRadius;
-    let sweepActive = false;
-    
-    function startMagneticSweep() {
-        sweepActive = true;
-        sweepX = width + mouseRadius;
-        
-        gsap.to({ x: sweepX }, {
-            x: -mouseRadius,
-            duration: 1.5,
-            ease: "power1.inOut",
-            onUpdate: function() {
-                sweepX = this.targets()[0].x;
-            },
-            onComplete: function() {
-                sweepActive = false;
-            }
-        });
-    }
-
-    // Mouse move handler
-    canvas.addEventListener('mousemove', (e) => {
-        prevMouseX = mouseX;
-        prevMouseY = mouseY;
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    canvas.addEventListener('mouseleave', () => {
-        mouseX = -1000;
-        mouseY = -1000;
     });
 
     // Animation loop
@@ -701,113 +284,51 @@ function initDotAnimation() {
         const mouseVelX = mouseX - prevMouseX;
         const mouseVelY = mouseY - prevMouseY;
 
-        // Update and draw dots
+        // Update and draw dots (no magnetic effect)
         dots.forEach(dot => {
-            // Calculate distance from mouse
-            const dx = mouseX - dot.x;
-            const dy = mouseY - dot.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            // Calculate distance from sweep line (if active)
-            let sweepDistance = Infinity;
-            if (sweepActive) {
-                sweepDistance = Math.abs(sweepX - dot.x);
+            // Only draw dots within 600px height
+            if (dot.y > 600) {
+                return;
             }
             
-            // Use the closer of mouse or sweep
-            const effectiveDistance = Math.min(distance, sweepDistance);
-            const useSweep = sweepActive && sweepDistance < distance;
-
-            if (effectiveDistance < mouseRadius) {
-                // Magnetic field effect
-                const distanceRatio = 1 - effectiveDistance / mouseRadius;
-                const magneticForce = distanceRatio * distanceRatio * pullStrength; // Quadratic falloff
-                
-                if (useSweep) {
-                    // Sweep effect: pull in Y direction with wave pattern
-                    const sweepDx = sweepX - dot.x;
-                    const sweepDy = 0; // Vertical center
-                    const sweepAngle = Math.atan2(sweepDy, sweepDx);
-                    
-                    // Horizontal pull towards sweep line
-                    dot.vx += Math.cos(sweepAngle) * magneticForce * 0.5;
-                    
-                    // Vertical wave motion
-                    const waveOffset = Math.sin(dot.x * 0.02 + Date.now() * 0.003) * 30;
-                    const waveDy = waveOffset - (dot.y - dot.originalY);
-                    dot.vy += waveDy * magneticForce * 0.3;
-                } else {
-                    // Normal mouse effect
-                    const angle = Math.atan2(dy, dx);
-                    dot.vx += Math.cos(angle) * magneticForce;
-                    dot.vy += Math.sin(angle) * magneticForce;
-                    
-                    // Add mouse velocity influence (flow effect)
-                    dot.vx += mouseVelX * velocityInfluence * distanceRatio;
-                    dot.vy += mouseVelY * velocityInfluence * distanceRatio;
-                    
-                    // Slight orbital motion for more fluid feel
-                    const orbitalForce = distanceRatio * 0.02;
-                    dot.vx += -Math.sin(angle) * orbitalForce;
-                    dot.vy += Math.cos(angle) * orbitalForce;
-                }
-            }
-
-            // Apply velocity with damping
-            dot.x += dot.vx;
-            dot.y += dot.vy;
-            dot.vx *= 0.88; // Smooth damping
-            dot.vy *= 0.88;
-
-            // Elastic return to original position
-            const returnForce = 0.05;
-            const returnDx = dot.originalX - dot.x;
-            const returnDy = dot.originalY - dot.y;
-            dot.vx += returnDx * returnForce;
-            dot.vy += returnDy * returnForce;
-
-            // Calculate size based on distance from mouse or sweep
-            let size = dotRadius;
-            if (effectiveDistance < mouseRadius) {
-                size = dotRadius + (1 - effectiveDistance / mouseRadius) * 2; // Reduced size increase
-            }
-
-            // Calculate opacity based on distance from mouse or sweep
-            let opacity = 0.3;
-            let color = { r: 255, g: 255, b: 255 }; // Default white
+            // Reset dot to original position (no movement)
+            dot.x = dot.originalX;
+            dot.y = dot.originalY;
             
-            if (effectiveDistance < mouseRadius) {
-                opacity = 0.3 + (1 - effectiveDistance / mouseRadius) * 0.7;
-                
-                // Color based on position
-                const hue = (dot.originalX / width) * 360; // Horizontal gradient
-                const sat = 70 + (1 - distance / mouseRadius) * 30; // More saturated near mouse
-                const light = 50 + (1 - distance / mouseRadius) * 20; // Brighter near mouse
-                
-                // Convert HSL to RGB
-                const c = (1 - Math.abs(2 * light / 100 - 1)) * sat / 100;
-                const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
-                const m = light / 100 - c / 2;
-                
-                let r, g, b;
-                if (hue < 60) {
-                    r = c; g = x; b = 0;
-                } else if (hue < 120) {
-                    r = x; g = c; b = 0;
-                } else if (hue < 180) {
-                    r = 0; g = c; b = x;
-                } else if (hue < 240) {
-                    r = 0; g = x; b = c;
-                } else if (hue < 300) {
-                    r = x; g = 0; b = c;
-                } else {
-                    r = c; g = 0; b = x;
-                }
-                
-                color.r = Math.round((r + m) * 255);
-                color.g = Math.round((g + m) * 255);
-                color.b = Math.round((b + m) * 255);
+            // Fixed size and opacity
+            const size = dotRadius;
+            const opacity = 0.3;
+            
+            // Color based on horizontal position (gradient effect)
+            const hue = (dot.originalX / width) * 360;
+            const sat = 70;
+            const light = 50;
+            
+            // Convert HSL to RGB
+            const c = (1 - Math.abs(2 * light / 100 - 1)) * sat / 100;
+            const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
+            const m = light / 100 - c / 2;
+            
+            let r, g, b;
+            if (hue < 60) {
+                r = c; g = x; b = 0;
+            } else if (hue < 120) {
+                r = x; g = c; b = 0;
+            } else if (hue < 180) {
+                r = 0; g = c; b = x;
+            } else if (hue < 240) {
+                r = 0; g = x; b = c;
+            } else if (hue < 300) {
+                r = x; g = 0; b = c;
+            } else {
+                r = c; g = 0; b = x;
             }
+            
+            const color = {
+                r: Math.round((r + m) * 255),
+                g: Math.round((g + m) * 255),
+                b: Math.round((b + m) * 255)
+            };
 
             // Draw dot
             ctx.beginPath();
@@ -822,14 +343,15 @@ function initDotAnimation() {
     // Handle window resize
     window.addEventListener('resize', () => {
         width = window.innerWidth;
-        height = window.innerHeight;
+        height = 600; // Fixed height for main content area
         canvas.width = width;
         canvas.height = height;
 
-        // Recreate dots
+        // Recreate dots (only for 600px height)
+        const maxHeight = 600;
         dots.length = 0;
         for (let x = 0; x < width; x += dotSpacing) {
-            for (let y = 0; y < height; y += dotSpacing) {
+            for (let y = 0; y < maxHeight; y += dotSpacing) {
                 dots.push({
                     x: x,
                     y: y,
@@ -934,11 +456,11 @@ function createDotText() {
     });
 }
 
-// Animate menu items from bottom to top
-function animateMenuItems() {
+// Animate hero text
+function animateHeroText() {
     const heroTitles = document.querySelectorAll('.hero-title');
     const heroDescription = document.querySelector('.hero-description');
-    const mainNavItems = document.querySelectorAll('.main-nav .nav-item');
+    const categoryTabs = document.querySelector('.category-tabs');
     
     // Animate hero titles first
     gsap.to(heroTitles, {
@@ -953,44 +475,251 @@ function animateMenuItems() {
     if (heroDescription) {
         gsap.to(heroDescription, {
             y: 0,
-            opacity: 0.8,
+            opacity: 1,
             duration: 1.0,
             ease: "power3.out",
             delay: 0.4
         });
     }
     
-    // Set initial state for nav items - hidden below
-    gsap.set(mainNavItems, {
-        y: 50,
-        opacity: 0
+    // Animate category tabs
+    if (categoryTabs) {
+        gsap.to(categoryTabs, {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            delay: 0.6
+        });
+    }
+}
+
+// Load AI articles
+let aiArticles = [];
+let allArticles = [];
+
+// Default articles (non-AI)
+const defaultArticles = [
+    {
+        title: '미니멀리즘과 브루탈리즘의 조화',
+        description: '현대 웹 디자인 트렌드에서 두 가지 상반된 스타일이 어떻게 융합되는지 살펴봅니다.',
+        date: '2026.01.13',
+        author: 'design',
+        category: 'ui'
+    },
+    {
+        title: '브랜드 스토리텔링의 디지털 전환',
+        description: '디지털 시대에 브랜드가 고객과 소통하는 방식의 변화와 새로운 마케팅 전략을 분석합니다.',
+        date: '2026.01.12',
+        author: 'marketing',
+        category: 'brand-marketing'
+    },
+    {
+        title: '사용자 경험을 향상시키는 인터랙션 디자인',
+        description: '직관적이고 매력적인 UI 인터랙션을 만드는 디자인 원칙과 최신 트렌드를 소개합니다.',
+        date: '2026.01.10',
+        author: 'ui',
+        category: 'ui'
+    },
+    {
+        title: '데이터 기반 UX 디자인 방법론',
+        description: '사용자 데이터를 분석하여 더 나은 사용자 경험을 설계하는 실전 가이드입니다.',
+        date: '2026.01.09',
+        author: 'ux',
+        category: 'ux'
+    },
+    {
+        title: '디지털 브랜드 아이덴티티 구축 전략',
+        description: '온라인에서 브랜드를 차별화하고 강력한 아이덴티티를 만드는 디자인 접근법을 다룹니다.',
+        date: '2026.01.08',
+        author: 'brand',
+        category: 'brand-design'
+    }
+];
+
+async function loadAIArticles() {
+    try {
+        const response = await fetch('/ai-articles.json');
+        if (response.ok) {
+            aiArticles = await response.json();
+            console.log(`✅ ${aiArticles.length}개의 AI 아티클 로드 완료`);
+        } else {
+            console.log('⚠️ AI 아티클 파일을 찾을 수 없습니다.');
+            aiArticles = [];
+        }
+    } catch (error) {
+        console.log('⚠️ AI 아티클 로드 실패:', error.message);
+        aiArticles = [];
+    }
+    
+    // Combine all articles
+    allArticles = [...defaultArticles, ...aiArticles];
+}
+
+// Render content cards
+function renderContentCards(articles) {
+    const grid = document.getElementById('content-grid');
+    if (!grid) return;
+    
+    if (articles.length === 0) {
+        grid.innerHTML = '<div class="no-content">콘텐츠가 없습니다.</div>';
+        return;
+    }
+    
+    grid.innerHTML = articles.map(article => {
+        // URL 검증: 메인 페이지 URL이면 제외
+        let url = article.url || '#';
+        if (url === 'https://the-edit.co.kr/' || url === 'https://the-edit.co.kr' || !url.match(/\/\d+$/)) {
+            console.warn(`⚠️ 유효하지 않은 URL 발견: "${article.title}" (${url})`);
+            url = '#'; // 유효하지 않은 URL은 링크 비활성화
+        }
+        const thumbnail = article.thumbnail || '';
+        
+        return `
+        <a href="${url}" ${url === '#' ? 'onclick="return false;"' : 'target="_blank" rel="noopener noreferrer"'} class="content-card" data-category="${article.category || 'all'}">
+            <div class="card-thumbnail">
+                ${thumbnail 
+                    ? `<img src="${thumbnail}" alt="${article.title || ''}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />`
+                    : ''
+                }
+                <div class="thumbnail-placeholder" style="${thumbnail ? 'display: none;' : ''}"></div>
+            </div>
+            <div class="card-info">
+                <div class="card-meta">${article.author || 'the-edit'} | ${article.date || ''}</div>
+                <h3 class="card-title">${article.title || ''}</h3>
+                <p class="card-description">${article.description || ''}</p>
+            </div>
+        </a>
+        `;
+    }).join('');
+}
+
+// Initialize category tabs
+function initCategoryTabs() {
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    
+    // Load articles first
+    loadAIArticles().then(() => {
+        // Initial render with all articles
+        renderContentCards(allArticles);
     });
     
-    // Animate nav items with stagger, delayed after hero titles
-    gsap.to(mainNavItems, {
-        y: 0,
-        opacity: 0.8,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.1,
-        delay: 0.5,
-        onComplete: function() {
-            // Ensure final opacity is set for all items
-            mainNavItems.forEach(item => {
-                item.style.opacity = '0.8';
-            });
-        }
+    categoryButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Remove active class from all buttons
+            categoryButtons.forEach(b => b.classList.remove('active'));
+            
+            // Add active class to clicked button
+            btn.classList.add('active');
+            
+            // Get category
+            const category = btn.getAttribute('data-category');
+            console.log('Selected category:', category);
+            
+            // Filter and render content
+            let articlesToShow = [];
+            if (category === 'ai') {
+                // Show only AI articles
+                articlesToShow = aiArticles;
+            } else if (category === 'all') {
+                // Show all articles
+                articlesToShow = allArticles;
+            } else {
+                // Filter by category
+                articlesToShow = allArticles.filter(article => {
+                    const articleCategory = article.category || 'all';
+                    return articleCategory === category;
+                });
+            }
+            
+            // Render cards
+            renderContentCards(articlesToShow);
+            
+            // Scroll to category tabs with smooth animation
+            const categoryTabs = document.getElementById('category-tabs');
+            if (categoryTabs) {
+                const headerHeight = 60;
+                const targetPosition = categoryTabs.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// Search functionality
+function initSearch() {
+    const searchInput = document.querySelector('.search-input');
+    if (!searchInput) return;
+    
+    let searchTimeout;
+    
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.trim().toLowerCase();
+        
+        // Debounce search
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            if (searchTerm === '') {
+                // If search is empty, show all articles
+                renderContentCards(allArticles);
+                // Reset category buttons
+                const categoryButtons = document.querySelectorAll('.category-btn');
+                categoryButtons.forEach(btn => {
+                    if (btn.getAttribute('data-category') === 'all') {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            } else {
+                // Filter articles by search term
+                const filteredArticles = allArticles.filter(article => {
+                    const title = (article.title || '').toLowerCase();
+                    const description = (article.description || '').toLowerCase();
+                    const author = (article.author || '').toLowerCase();
+                    const category = (article.category || '').toLowerCase();
+                    
+                    return title.includes(searchTerm) || 
+                           description.includes(searchTerm) || 
+                           author.includes(searchTerm) ||
+                           category.includes(searchTerm);
+                });
+                
+                renderContentCards(filteredArticles);
+                
+                // Remove active class from all category buttons when searching
+                const categoryButtons = document.querySelectorAll('.category-btn');
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+            }
+            
+            // Scroll to content grid
+            const contentGrid = document.getElementById('content-grid');
+            if (contentGrid) {
+                const headerHeight = 60;
+                const targetPosition = contentGrid.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }, 300); // 300ms debounce
     });
 }
 
 // Navigation functionality
 function initNavigation() {
-    const mainNavItems = document.querySelectorAll('.main-nav .nav-item');
     const headerNavItems = document.querySelectorAll('.header-nav .header-nav-item');
     const headerLogo = document.querySelector('#header-logo');
     
-    // Handle main navigation clicks
-    mainNavItems.forEach(item => {
+    // Handle header navigation clicks
+    headerNavItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
             const url = item.getAttribute('href');
@@ -1009,14 +738,20 @@ function initNavigation() {
     }
 }
 
+// Initialize main page immediately - removed duplicate
+
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
     window.addEventListener('load', () => {
-        init();
+        initMainPage();
         initNavigation();
+        initCategoryTabs();
+        initSearch();
     });
 } else {
-    init();
+    initMainPage();
     initNavigation();
+    initCategoryTabs();
+    initSearch();
 }
 

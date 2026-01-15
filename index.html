@@ -4,33 +4,28 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WYND23 - Loading</title>
+  <title>WYND23</title>
 </head>
 <body>
-  <div id="app">
-    <canvas id="loading-canvas"></canvas>
-  </div>
-
-  <!-- Page Transition Overlay -->
-  <div id="page-transition" class="page-transition">
-    <div class="page-transition-content" id="transition-text"></div>
-  </div>
-  
-  <!-- Fixed Header (hidden initially) -->
+  <!-- Fixed Header -->
   <header id="fixed-header" class="fixed-header">
-    <div class="header-logo" id="header-logo">WYND23</div>
-    <nav class="header-nav">
-      <a href="work.html" class="header-nav-item">WORK</a>
-      <a href="about.html" class="header-nav-item">ABOUT</a>
-      <a href="contact.html" class="header-nav-item">CONTACT</a>
-    </nav>
+    <div class="header-container">
+      <div class="header-logo" id="header-logo">WYND23</div>
+      <div class="header-right">
+        <nav class="header-nav">
+          <a href="work.html" class="header-nav-item">WORK</a>
+          <a href="about.html" class="header-nav-item">ABOUT</a>
+          <a href="contact.html" class="header-nav-item">CONTACT</a>
+        </nav>
+        <div class="header-search">
+          <input type="text" class="search-input" placeholder="Search..." />
+        </div>
+      </div>
+    </div>
   </header>
 
   <!-- Main Landing Page -->
   <div id="main-content" class="main-content">
-    <!-- Icon Grid Background -->
-    <div id="icon-grid" class="icon-grid"></div>
-    <canvas id="canvas"></canvas>
     <div id="content">
       <div class="hero-text">
         <h1 class="hero-title">Your Vision,</h1>
@@ -41,11 +36,25 @@
           기업 홈페이지, 브랜드 사이트, 맞춤형 웹사이트까지
         </p>
       </div>
-      <nav class="main-nav">
-        <a href="work.html" class="nav-item">WORK</a>
-        <a href="about.html" class="nav-item">ABOUT</a>
-        <a href="contact.html" class="nav-item">CONTACT</a>
-      </nav>
+      <div class="category-tabs" id="category-tabs">
+        <div class="category-header">
+          <span class="category-emoji">📰</span>
+          <h2 class="category-title">최근소식</h2>
+        </div>
+        <div class="category-buttons">
+          <button class="category-btn active" data-category="all">전체</button>
+          <button class="category-btn" data-category="ai">AI</button>
+          <button class="category-btn" data-category="ui">UI</button>
+          <button class="category-btn" data-category="ux">UX</button>
+          <button class="category-btn" data-category="brand-design">브랜드디자인</button>
+          <button class="category-btn" data-category="brand-marketing">브랜드마케팅</button>
+          <button class="category-btn" data-category="content-marketing">콘텐츠마케팅</button>
+        </div>
+      </div>
+      
+      <div class="content-grid" id="content-grid">
+        <!-- Cards will be rendered by JavaScript -->
+      </div>
     </div>
   </div>
 

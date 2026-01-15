@@ -202,7 +202,7 @@ body.white-page .fixed-header .header-nav-item.active {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 180px 80px 80px;
+  padding: 200px 80px 80px;
   text-align: left;
   overflow-y: auto;
   height: 100vh;
@@ -401,7 +401,7 @@ body.white-page .fixed-header .header-nav-item.active {
   }
 
   .work-page {
-    padding: 100px 40px 60px;
+    padding: 120px 40px 60px;
   }
 
   .work-main-title {
@@ -459,7 +459,7 @@ body.white-page .fixed-header .header-nav-item.active {
   }
 
   .work-page {
-    padding: 90px 24px 40px;
+    padding: 110px 24px 40px;
   }
 
   .work-main-title {
