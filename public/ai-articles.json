@@ -1,74 +1,178 @@
 [
   {
-    "title": "Apple, 가장 강력한 창작 앱들을 한데 모은 Apple Creator Studio 공개",
-    "description": "영상·음악·이미지·문서 작업 앱을 하나로 묶은 구독형 서비스로 창작자들의 워크플로우를 혁신합니다",
-    "date": "2026.01.15",
-    "author": "aurora",
-    "category": "TECH",
-    "url": "https://the-edit.co.kr/83275",
-    "thumbnail": "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=800&h=600&fit=crop"
+    "title": "[대구가톨릭대학교] 미취업자 AI·DX 전문가 교육 프로그램 참여자 모집 (일정변경)",
+    "url": "https://eopla.net/magazines/38389",
+    "description": "[대구가톨릭대학교] 미취업자 AI·DX 전문가 교육 프로그램 참여자 모집 (일정변경)",
+    "thumbnail": "",
+    "author": "이오플래닛",
+    "date": "2026.01.26"
+  },
+  {
+    "title": "경력기술서는 그렇게 쓰는게 아니예요",
+    "url": "https://eopla.net/magazines/38381",
+    "description": "경력기술서는 그렇게 쓰는게 아니예요",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_202ca3f7-444c-4ca8-9142-98f68ef57f51symbol.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145659Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=42267db38ef789ad547d7f33948433fb2a6c5bd27e72115cc47b7295bb026758",
+    "author": "이오플래닛",
+    "date": "2026.01.15."
+  },
+  {
+    "title": "로봇손(전자 의수)로 어떻게 쓰일까?",
+    "url": "https://eopla.net/magazines/38375",
+    "description": "로봇손(전자 의수)로 어떻게 쓰일까?",
+    "thumbnail": "",
+    "author": "이오플래닛",
+    "date": "2026.01.15."
+  },
+  {
+    "title": "2026 AI 마케팅 생존 전략",
+    "url": "https://eopla.net/magazines/38298",
+    "description": "2026 AI 마케팅 생존 전략",
+    "thumbnail": "",
+    "author": "이오플래닛",
+    "date": "2026.01.15."
+  },
+  {
+    "title": "[국비지원] NVIDIA H200 GPU 기반 실습 중심 AI 풀스택 과정",
+    "url": "https://eopla.net/magazines/38369",
+    "description": "[국비지원] NVIDIA H200 GPU 기반 실습 중심 AI 풀스택 과정",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_76bdc508-9704-4673-9562-93858aaab7eb%E1%84%8A%E1%85%A5%E1%86%B7%E1%84%82%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AF.jpg.jpg?X-Amz-Expires=600&X-Amz-Date=20260115T145659Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=f18679541ece9c48b6d73189799e4f7604f7e0ee9118ca374fb1f52c5aa955f7",
+    "author": "이오플래닛",
+    "date": "2026.01.15."
+  },
+  {
+    "title": "AI 시대, ‘경량조직’은 어떻게 만들어질까요?",
+    "url": "https://eopla.net/magazines/37475",
+    "description": "AI 시대, ‘경량조직’은 어떻게 만들어질까요?",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_dfa44e8b-c1d1-4475-8261-3b53428c6c6e%EA%B3%A0%EC%98%88%EC%84%B1_%EB%8C%80%ED%91%9C%EB%8B%982.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145659Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=4b61797bc466bbf5980169accef43b9a74324b8d520759f2a81e48c7af80819c",
+    "author": "이오플래닛",
+    "date": "2026.01.15."
+  },
+  {
+    "title": "초기 스타트업이 AI 도입 시점을 늦춰야 하는 이유",
+    "url": "https://eopla.net/magazines/38236",
+    "description": "초기 스타트업이 AI 도입 시점을 늦춰야 하는 이유",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_a07d7a05-b857-4ff7-b686-84bc15a0909420240207_104900.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145702Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=e955f37b6a46496f2eab26d78cc7d2acbe9f9b68b6a76570ebbe514d6e4e817e",
+    "author": "이오플래닛",
+    "date": "2026.01.15."
   },
   {
     "title": "애플 AI가 구글 제미나이와 손 잡은 이유",
-    "description": "결국 이렇게 될 줄은 알았습니다",
-    "date": "2026.01.14",
-    "author": "최호섭",
-    "category": "TECH",
     "url": "https://the-edit.co.kr/83357",
-    "thumbnail": "https://the-edit.co.kr/wp-content/uploads/2026/01/apple-AI-google.jpg"
+    "description": "결국 이렇게 될 줄은 알았습니다",
+    "thumbnail": "https://the-edit.co.kr/wp-content/uploads/2026/01/apple-AI-google.jpg",
+    "author": "디에디트",
+    "date": "2026.01.14"
   },
   {
-    "title": "AI 기반 디자인 도구의 새로운 패러다임",
-    "description": "생성형 AI를 활용한 디자인 자동화 도구가 크리에이티브 업계를 변화시키고 있습니다",
-    "date": "2026.01.13",
-    "author": "디에디트",
-    "category": "TECH",
-    "url": "https://the-edit.co.kr/83316",
-    "thumbnail": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=600&fit=crop"
+    "title": "AI가 다 해주는 시대, &#39;진짜 사람&#39;의 일은 무엇일까요?",
+    "url": "https://eopla.net/magazines/38312",
+    "description": "AI가 다 해주는 시대, &#39;진짜 사람&#39;의 일은 무엇일까요?",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_537a5e85-95e0-490f-bb7e-bf39a54ef07d%ED%94%84%EB%A1%9C%ED%95%84%EC%82%AC%EC%A7%84-012.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145659Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=9e3395ad819ff077579691b01c2460440862927404a9b05336e72f24ad5d4155",
+    "author": "이오플래닛",
+    "date": "2026.01.14."
   },
   {
-    "title": "ChatGPT와 함께하는 콘텐츠 제작 워크플로우",
-    "description": "AI 도구를 활용한 효율적인 콘텐츠 제작 프로세스와 실전 활용 사례를 공유합니다",
-    "date": "2026.01.11",
-    "author": "디에디트",
-    "category": "TECH",
-    "url": "https://the-edit.co.kr/82994",
-    "thumbnail": "https://images.unsplash.com/photo-1676299080923-7e25b8c8eef3?w=800&h=600&fit=crop"
+    "title": "[공유] 요란한 K-AI 판, 실질적인 &#39;성능&#39;으로 승부수 던진 K-엑사원 (1/28까지 무료 체험 팁)체",
+    "url": "https://eopla.net/magazines/38349",
+    "description": "[공유] 요란한 K-AI 판, 실질적인 &#39;성능&#39;으로 승부수 던진 K-엑사원 (1/28까지 무료 체험 팁)체",
+    "thumbnail": "",
+    "author": "이오플래닛",
+    "date": "2026.01.14."
+  },
+  {
+    "title": "혼자서 AI 에이전트 20개를 관리하고 1억 계약을 딴 창업가",
+    "url": "https://eopla.net/magazines/38348",
+    "description": "혼자서 AI 에이전트 20개를 관리하고 1억 계약을 딴 창업가",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_e4e6f089-ac91-40c7-aba3-346571446c2eChange_the_background_of_the_image_to_match_the_gr-1764914518720.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145700Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=a063c37c91bd2eb61357d7507573d6873e0a23393baa1e4fb7b2c936fd8655d2",
+    "author": "이오플래닛",
+    "date": "2026.01.14."
+  },
+  {
+    "title": "AI가 코드를 짤 수는 있지만, 감옥에 갈 수는 없다",
+    "url": "https://eopla.net/magazines/38341",
+    "description": "AI가 코드를 짤 수는 있지만, 감옥에 갈 수는 없다",
+    "thumbnail": "",
+    "author": "이오플래닛",
+    "date": "2026.01.14."
+  },
+  {
+    "title": "mRNA 백신 혁신과 특허: Bayer가 소송을 제기한 이유와 핵심 기술",
+    "url": "https://eopla.net/magazines/38337",
+    "description": "mRNA 백신 혁신과 특허: Bayer가 소송을 제기한 이유와 핵심 기술",
+    "thumbnail": "",
+    "author": "이오플래닛",
+    "date": "2026.01.14."
+  },
+  {
+    "title": "[1/27 개강] NVIDIA H200 실습으로 끝내는 자바 &amp; AI 개발자 양성과정",
+    "url": "https://eopla.net/magazines/38328",
+    "description": "[1/27 개강] NVIDIA H200 실습으로 끝내는 자바 &amp; AI 개발자 양성과정",
+    "thumbnail": "",
+    "author": "이오플래닛",
+    "date": "2026.01.14."
+  },
+  {
+    "title": "AI심사역의 등장, &quot;오히려 좋다&quot;는 창업자들",
+    "url": "https://eopla.net/magazines/38322",
+    "description": "AI심사역의 등장, &quot;오히려 좋다&quot;는 창업자들",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_9f2d5aaa-34fb-41bf-acbe-5df23809a363%EC%9C%A0%ED%8A%9C%EB%B8%8C_%ED%94%84%EB%A1%9C%ED%95%84_%EB%A6%B0%EC%8A%A4%ED%94%84%EB%A6%B0%ED%8A%B8.jpg.jpg?X-Amz-Expires=600&X-Amz-Date=20260115T145700Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=ef643106dc6a4a6f3448b60e974982004ed5ee02ec861a203a580ef9eb0d0fbf",
+    "author": "이오플래닛",
+    "date": "2026.01.14."
+  },
+  {
+    "title": "국가대표 AI 논란, 흑백요리사에서 힌트를 찾다",
+    "url": "https://eopla.net/magazines/38313",
+    "description": "국가대표 AI 논란, 흑백요리사에서 힌트를 찾다",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_537a5e85-95e0-490f-bb7e-bf39a54ef07d%ED%94%84%EB%A1%9C%ED%95%84%EC%82%AC%EC%A7%84-012.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145659Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=9e3395ad819ff077579691b01c2460440862927404a9b05336e72f24ad5d4155",
+    "author": "이오플래닛",
+    "date": "2026.01.13."
+  },
+  {
+    "title": "AI 음악으로 콘텐츠 OST 제작 실험… 그레이프스, ‘율도’ 세계관 공모전 진행",
+    "url": "https://eopla.net/magazines/38304",
+    "description": "AI 음악으로 콘텐츠 OST 제작 실험… 그레이프스, ‘율도’ 세계관 공모전 진행",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_537a5e85-95e0-490f-bb7e-bf39a54ef07d%ED%94%84%EB%A1%9C%ED%95%84%EC%82%AC%EC%A7%84-012.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145702Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=737b2259688801f7d500d110cd5d25903c7c078cd81c43878106a7c670bb90ef",
+    "author": "이오플래닛",
+    "date": "2026.01.13."
+  },
+  {
+    "title": "🚀 AI 시대의 브랜드 생존 법칙 [세미나] CEP를 선점하고 GEO로 장악하라",
+    "url": "https://eopla.net/magazines/38302",
+    "description": "🚀 AI 시대의 브랜드 생존 법칙 [세미나] CEP를 선점하고 GEO로 장악하라",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_a030267a-b803-46f6-bd53-4255eaf2022c%E1%84%90%E1%85%B5%E1%86%B7%E1%84%89%E1%85%B3%E1%84%91%E1%85%A1%E1%84%85%E1%85%B3%E1%84%90%E1%85%A1%E1%84%85%E1%85%A9%E1%84%80%E1%85%A9.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145702Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=55948f0bb9b184d57dde609794241fecccab8f9d40ec96d250da5be1bb55e7b0",
+    "author": "이오플래닛",
+    "date": "2026.01.13."
+  },
+  {
+    "title": "애플의 제미나이 채택, 전략적 교두보인가 기술 종속의 덫인가?(AMEET분석)",
+    "url": "https://eopla.net/magazines/38291",
+    "description": "애플의 제미나이 채택, 전략적 교두보인가 기술 종속의 덫인가?(AMEET분석)",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_af168ff1-bf92-440f-b360-c5a4088269c9%EC%A0%9C%EB%AA%A9_%EC%97%86%EC%9D%8C.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145702Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=02f78ad76fe38bb6dcdeda0c50db6f9f45c6f30a830754217ca2ad3c0edbc6bd",
+    "author": "이오플래닛",
+    "date": "2026.01.12."
   },
   {
     "title": "탐난다, CES 2026 신박템 리스트 9",
-    "description": "로봇에서 시작해서 로봇으로 끝났다",
-    "date": "2026.01.09",
-    "author": "이주형",
-    "category": "TECH",
     "url": "https://the-edit.co.kr/83251",
-    "thumbnail": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop"
-  },
-  {
-    "title": "AI 스타트업 투자 트렌드 2026",
-    "description": "2026년 AI 스타트업 투자 동향과 주요 투자처를 정리했습니다",
-    "date": "2026.01.08",
+    "description": "로봇에서 시작해서 로봇으로 끝났다",
+    "thumbnail": "https://the-edit.co.kr/wp-content/uploads/2026/01/2601-lg-cloid-3-1920x1156-1.jpg",
     "author": "디에디트",
-    "category": "TECH",
-    "url": "https://the-edit.co.kr/82890",
-    "thumbnail": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop"
-  },
-  {
-    "title": "생성형 AI가 바꾸는 마케팅 전략",
-    "description": "AI 기반 콘텐츠 생성 도구가 마케팅 업계에 미치는 영향과 활용 방법",
-    "date": "2026.01.07",
-    "author": "디에디트",
-    "category": "TECH",
-    "url": "https://the-edit.co.kr/82578",
-    "thumbnail": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop"
+    "date": "2026.01.09"
   },
   {
     "title": "나의 첫 반려 로봇, 나무엑스",
-    "description": "AI로봇으로 챙기는 건강 루틴",
-    "date": "2025.12.23",
-    "author": "조은나래",
-    "category": "TECH",
     "url": "https://the-edit.co.kr/82794",
-    "thumbnail": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=600&fit=crop"
+    "description": "AI로봇으로 챙기는 건강 루틴",
+    "thumbnail": "https://the-edit.co.kr/wp-content/uploads/2025/12/1600_01.jpg",
+    "author": "디에디트",
+    "date": "2025.12.23"
+  },
+  {
+    "title": "피지컬 AI 해외 주요 기업 동향",
+    "url": "https://eopla.net/magazines/38331",
+    "description": "피지컬 AI 해외 주요 기업 동향",
+    "thumbnail": "https://eo-server.s3.ap-northeast-2.amazonaws.com/uploads/profile_thumb_66aace7f-85ee-4802-b63a-08367d6ba9b6%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2024-01-30_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_6.05.38.png.png?X-Amz-Expires=600&X-Amz-Date=20260115T145700Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAYOZYIPJSGDMGXHR3%2F20260115%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=af75f638f267e667974e229da3cbdb3a5cc67a91ccf678329c9d74a35df86740",
+    "author": "이오플래닛",
+    "date": "2024.01.30"
   }
 ]
